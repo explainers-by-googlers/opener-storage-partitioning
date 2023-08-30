@@ -40,3 +40,12 @@ Now that the first-party notexample.com window and the third-party notexample.co
 ![](./images/threat_3.png)
 
 This is possible as long as the frames are in the same COOP Group.
+
+## Proposal
+
+Our goal is to maintain cross-page communication where important to web function while striking a better balance with user-privacy.
+
+This will be done in two steps. First, whenever a frame navigates cross-origin any other windows with a window.opener handle pointing to the navigating frame will have that handle cleared. Second, any frames with a valid window.opener (or window.top.opener) handle at the time of navigation will have transient storage via a StorageKey nonce instead of access to standard first- and third-party StorageKeys.
+
+The first proposal should be less disruptive than the second, but metrics will need to be gathered on both. Once implemented, these proposals together prevent any synchronous or asynchronous communication between a first- and third-party storage bucket for the same origin. Instead, communication between two buckets for the same origin will only be possible if one of the buckets is transient. This mitigates the threats we are concerned with.
+
