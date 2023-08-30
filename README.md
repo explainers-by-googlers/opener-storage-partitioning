@@ -22,14 +22,21 @@ This section details the two threats we’re concerned with, ordered by the brea
 
 If a user visits example.com which embeds an iframe for notexample.com, this iframe can open a new window for notexample.com.
 
+![](./images/threat_0.png)
+
 Now that the first-party notexample.com window and the third-party notexample.com iframe are aware of each other, they invoke JavaScript on each other.
+
+![](./images/threat_1.png)
 
 This is possible as long as the frames are in the same Agent Cluster.
 
 ### Asynchronous Communication
-
 If a user visits example.com which embeds an iframe for notexample.com, this iframe can open a new window for notexample.com.
 
+![](./images/threat_2.png)
+
 Now that the first-party notexample.com window and the third-party notexample.com iframe are aware of each other, they can use postMessage with each other.
+
+![](./images/threat_3.png)
 
 This is possible as long as the frames are in the same COOP Group.
