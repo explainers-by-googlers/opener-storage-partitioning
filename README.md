@@ -60,3 +60,33 @@ The opener can be thought of as switching from a binary state (present or none) 
 Any top-level frame with an active window.opener handle must have a transient StorageKey defined by the top-level origin and a nonce. Any sub-frames of this top-level frame will have transient StorageKeys defined by the origin of the frame and the same nonce as the top-level frame. If the window.opener handle is cleared, the next navigation of the top-level frame will have a non-transient first-party StorageKey. If the window.opener handle is cleared, navigation of a sub-frame will still be to a transient StorageKey as long as the top-level frame has a transient StorageKey.
 
 This change depends on the first part of the proposal. You could think of the rule being rephrased as ‘any frame with (its own or a recursive parent’s) window.opener handle that’s active or cleared and restorable must have transient storage.’
+
+## Interactions
+
+### Cross-Origin-Opener-Policy
+
+This proposal won’t conflict with the goal of using restrict-properties by default. That change helps mitigate the synchronous scripting threat we’re concerned with while this work ends up more focused on the same-origin cross-partition postMessage.
+
+## Considerations
+
+### User Confusion
+
+There could be a possible concern of long-lived windows on transient storage partitions confusing users. If there is no UI indication to the user that these windows are ‘special’ in some way they’ll wonder why two windows loading the same origin can differ in state (authentication or otherwise).
+
+### User Friction
+
+This breaking change would force authentication flows that depend on popups and opener references to have the user log back in to their provider once per BrowsingContext Group. This friction might be seen as a positive force to encourage developers to adopt [FedCM](https://github.com/fedidcg/FedCM) and other targeted APIs, but will need significant time in origin and then deprecation trial to ensure the web has time to adapt.
+
+## Alternate Options
+
+### Applying this proposal only to cross-origin iframes
+
+If we only force the partitioning (or block opener references) for windows opened by third-party iframes then that just pushes the top frame to participate in the collusion by opening the same origin that it’s embedded as an iframe instead of having the iframe do it.
+
+### Blocking all opener references or window.open
+
+This would break a huge amount of the web.
+
+## Chrome Timeline
+
+Rough target for an origin trial severing window.opener on cross-site navigation is Q4 2023 while transient storage for frames with a window.opener likely needs to wait for storage partitioning to fully launch first.
