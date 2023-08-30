@@ -55,11 +55,19 @@ If a frame navigates cross-origin any windows opened by that frame must have the
 
 The opener can be thought of as switching from a binary state (present or none) to a ternary state (present, pending, or none).
 
+#### Concrete Example
+
+If a publisher, say publisher.com, opens a new window on login.com as part of a login flow the two windows can communicate via post message. If the first window on publisher.com then navigates to some other origin, say wired.com, the two windows will no longer be able to communicate. If the user hits the back button on the first window and it restores the original publisher.com page then the two windows will be able to communicate again.
+
 ### Transient storage for frames with a window.opener
 
 Any top-level frame with an active window.opener handle must have a transient StorageKey defined by the top-level origin and a nonce. Any sub-frames of this top-level frame will have transient StorageKeys defined by the origin of the frame and the same nonce as the top-level frame. If the window.opener handle is cleared, the next navigation of the top-level frame will have a non-transient first-party StorageKey. If the window.opener handle is cleared, navigation of a sub-frame will still be to a transient StorageKey as long as the top-level frame has a transient StorageKey.
 
 This change depends on the first part of the proposal. You could think of the rule being rephrased as ‘any frame with (its own or a recursive parent’s) window.opener handle that’s active or cleared and restorable must have transient storage.’
+
+#### Concrete Example
+
+If a publisher, say publisher.com, opens a new window on login.com as part of a login flow the second window will be on a transient storage partition and not have access to the same storage as it would if the user navigated directly to login.com on a new window. The two windows will, however, be able to communicate via post message.
 
 ## Interactions
 
