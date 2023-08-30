@@ -65,6 +65,28 @@ Any top-level frame with an active window.opener handle must have a transient St
 
 This change depends on the first part of the proposal. You could think of the rule being rephrased as ‘any frame with (its own or a recursive parent’s) window.opener handle that’s active or cleared and restorable must have transient storage.’
 
+#### Abstract Examples
+
+If a user visits example.com, that window could open a second window on notexample.com. The second window would have transient storage.
+
+![](./images/partition_0.png)
+
+If the second window navigates, even cross-origin to stillnotexample.com, the storage in the second window is still transient.
+
+![](./images/partition_1.png)
+
+If the first window navigates cross-origin to stillnotexample.com, the storage in the second window is still transient.
+
+![](./images/partition_2.png)
+
+If the second window then navigates at all, even to another page on stillnotexample.com, the storage would no longer be transient.
+
+![](./images/partition_3.png)
+
+If the second window navigated back once in history, it would resume using the same transient storage as before.
+
+![](./images/partition_4.png)
+
 #### Concrete Example
 
 If a publisher, say publisher.com, opens a new window on login.com as part of a login flow the second window will be on a transient storage partition and not have access to the same storage as it would if the user navigated directly to login.com on a new window. The two windows will, however, be able to communicate via post message.
