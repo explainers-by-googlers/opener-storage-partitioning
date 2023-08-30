@@ -49,3 +49,14 @@ This will be done in two steps. First, whenever a frame navigates cross-origin a
 
 The first proposal should be less disruptive than the second, but metrics will need to be gathered on both. Once implemented, these proposals together prevent any synchronous or asynchronous communication between a first- and third-party storage bucket for the same origin. Instead, communication between two buckets for the same origin will only be possible if one of the buckets is transient. This mitigates the threats we are concerned with.
 
+### Severing window.opener on cross-site navigation
+
+If a frame navigates cross-origin any windows opened by that frame must have their window.opener handles cleared. The cleared handles can be restored if the opening frame navigates back in history to a state where the handles had previously been connected. If a frame navigates when it has a cleared window.opener handle, that handle will be blocked from restoration. If a frame navigates back in history to a state in which it had a window.opener handle cleared, that handle could be restored depending on the state of the opener.
+
+The opener can be thought of as switching from a binary state (present or none) to a ternary state (present, pending, or none).
+
+### Transient storage for frames with a window.opener
+
+Any top-level frame with an active window.opener handle must have a transient StorageKey defined by the top-level origin and a nonce. Any sub-frames of this top-level frame will have transient StorageKeys defined by the origin of the frame and the same nonce as the top-level frame. If the window.opener handle is cleared, the next navigation of the top-level frame will have a non-transient first-party StorageKey. If the window.opener handle is cleared, navigation of a sub-frame will still be to a transient StorageKey as long as the top-level frame has a transient StorageKey.
+
+This change depends on the first part of the proposal. You could think of the rule being rephrased as ‘any frame with (its own or a recursive parent’s) window.opener handle that’s active or cleared and restorable must have transient storage.’
