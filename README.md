@@ -18,3 +18,8 @@ The ability of windows to communicate with each other is critical to current web
 
 This section details the two threats we’re concerned with, ordered by the breadth of communication enabled by each. If synchronous scripting is possible that implies asynchronous communication is possible, but if asynchronous communication is possible that doesn’t imply synchronous scripting will be possible.
 
+### Synchronous Scripting
+
+If a user visits example.com which embeds an iframe for notexample.com, this iframe can open a new window for notexample.com.
+![](https://github.com/arichiv/opener-storage-partitioning/assets/666538/4bebdcfa-8f69-4a19-acf3-a3f34bb79913)
+
