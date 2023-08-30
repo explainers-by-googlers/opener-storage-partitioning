@@ -53,7 +53,7 @@ The first proposal should be less disruptive than the second, but metrics will n
 
 If a frame navigates cross-origin any windows opened by that frame must have their window.opener handles cleared. The cleared handles can be restored if the opening frame navigates back in history to a state where the handles had previously been connected. If a frame navigates when it has a cleared window.opener handle, that handle will be blocked from restoration. If a frame navigates back in history to a state in which it had a window.opener handle cleared, that handle could be restored depending on the state of the opener.
 
-The opener can be thought of as switching from a binary state (present or none) to a ternary state (present, pending, or none).
+The opener can be thought of as switching from a binary state (present or none) to a ternary state (present, pending, or none). Pending openers act like a none state, but could resume to a present state depending on how the opening window navigates.
 
 #### Simple Examples
 
