@@ -1,4 +1,4 @@
-![Explainer- Opener Storage Partitioning  PENDING CMA](https://github.com/arichiv/opener-storage-partitioning/assets/666538/a3a0635e-ab68-4480-a64f-40483e4bb3b0)# Explainer: Opener Storage Partitioning
+Explainer: Opener Storage Partitioning
 
 ## Introduction
 
