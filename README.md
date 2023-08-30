@@ -41,7 +41,7 @@ Now that the first-party notexample.com window and the third-party notexample.co
 
 This is possible as long as the frames are in the same COOP Group.
 
-## Proposal
+## Proposals
 
 Our goal is to maintain cross-page communication where important to web function while striking a better balance with user-privacy.
 
