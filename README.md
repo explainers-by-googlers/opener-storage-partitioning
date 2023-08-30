@@ -1,4 +1,4 @@
-# Explainer: Opener Storage Partitioning
+![Explainer- Opener Storage Partitioning  PENDING CMA](https://github.com/arichiv/opener-storage-partitioning/assets/666538/a3a0635e-ab68-4480-a64f-40483e4bb3b0)# Explainer: Opener Storage Partitioning
 
 ## Introduction
 
@@ -21,7 +21,15 @@ This section details the two threats we’re concerned with, ordered by the brea
 ### Synchronous Scripting
 
 If a user visits example.com which embeds an iframe for notexample.com, this iframe can open a new window for notexample.com.
-![](https://github.com/arichiv/opener-storage-partitioning/assets/666538/4bebdcfa-8f69-4a19-acf3-a3f34bb79913)
 
 Now that the first-party notexample.com window and the third-party notexample.com iframe are aware of each other, they invoke JavaScript on each other.
-![](https://github.com/arichiv/opener-storage-partitioning/assets/666538/a83af48e-4732-4ec9-b736-9f8e6e703950)
+
+This is possible as long as the frames are in the same Agent Cluster.
+
+### Asynchronous Communication
+
+If a user visits example.com which embeds an iframe for notexample.com, this iframe can open a new window for notexample.com.
+
+Now that the first-party notexample.com window and the third-party notexample.com iframe are aware of each other, they can use postMessage with each other.
+
+This is possible as long as the frames are in the same COOP Group.
