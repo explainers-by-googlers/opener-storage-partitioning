@@ -55,6 +55,28 @@ If a frame navigates cross-origin any windows opened by that frame must have the
 
 The opener can be thought of as switching from a binary state (present or none) to a ternary state (present, pending, or none).
 
+#### Complex Examples
+
+If a user visits example.com and it opens a second window to notexample.com, and that second window embeds an iframe for stillnotexample.com, and that iframe opens a third window to stillnotexample.com the second and third windows would have openers.
+
+![](./images/opener_complex_0.png)
+
+If the first window were to navigate cross-origin to notexample.com, the opener for just the second window would be cleared.
+
+![](./images/opener_complex_1.png)
+
+Starting from the initial state, if the second window were to navigate cross-origin to stillnotexample.com, the opener for just the third window would be cleared.
+
+![](./images/opener_complex_2.png)
+
+Starting from the initial state, if the iframe of the second window were to navigate cross-origin to example.com, the opener for just the third window would be cleared.
+
+![](./images/opener_complex_3.png)
+
+Starting from the initial state, if the third window were to navigate cross-origin to example.com, no openers would be cleared.
+
+![](./images/opener_complex_4.png)
+
 #### Concrete Example
 
 If a publisher, say publisher.com, opens a new window on login.com as part of a login flow the two windows can communicate via post message. If the first window on publisher.com then navigates to some other origin, say wired.com, the two windows will no longer be able to communicate. If the user hits the back button on the first window and it restores the original publisher.com page then the two windows will be able to communicate again.
