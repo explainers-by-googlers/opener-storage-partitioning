@@ -55,6 +55,48 @@ If a frame navigates cross-origin any windows opened by that frame must have the
 
 The opener can be thought of as switching from a binary state (present or none) to a ternary state (present, pending, or none).
 
+#### Simple Examples
+
+If a user visits example.com, that window could open a second window on notexample.com. The second window would have an opener handle to the first.
+
+![](./images/opener_simple_0.png)
+
+If the first window navigated to another page on example.com, the opener would be retained.
+
+![](./images/opener_simple_1.png)
+
+If the second window navigates, even cross-origin to stillnotexample.com, the opener is still retained.
+
+![](./images/opener_simple_2.png)
+
+If the first window navigated cross-origin to stillnotexample.com, the opener in the second window would be cleared (marked as pending).
+
+![](./images/opener_simple_3.png)
+
+If the first window navigates again to example.com, the opener would not be restored.
+
+![](./images/opener_simple_4.png)
+
+If the first window navigated back twice in history to example.com, the opener would be reconnected.
+
+![](./images/opener_simple_5.png)
+
+If the first window navigated cross-origin to notexample.com and then the second navigated cross-origin to notexample.com, the opener would be cleared (marked as pending).
+
+![](./images/opener_simple_6.png)
+
+If just the first window navigated back once in history to example.com, the opener would not be restored.
+
+![](./images/opener_simple_7.png)
+
+If the second window then navigated back once in history to stillnotexample.com, the opener would be reconnected.
+
+![](./images/opener_simple_8.png)
+
+If the second window navigated cross-origin to notexample.com after, the opener would still be retained.
+
+![](./images/opener_simple_9.png)
+
 #### Complex Examples
 
 If a user visits example.com and it opens a second window to notexample.com, and that second window embeds an iframe for stillnotexample.com, and that iframe opens a third window to stillnotexample.com the second and third windows would have openers.
