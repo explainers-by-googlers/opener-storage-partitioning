@@ -1,4 +1,4 @@
-Explainer: Opener Storage Partitioning
+# Explainer: Opener Storage Partitioning
 
 ## Introduction
 
