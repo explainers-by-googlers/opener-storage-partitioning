@@ -14,3 +14,7 @@ The former proposal is primarily concerned with user privacy (e.g., preventing t
 
 The ability of windows to communicate with each other is critical to current web infrastructure, especially for payment and login models. Whatever changes are pursued in this space must proceed with care to avoid breaking the web.
 
+## Threat Model
+
+This section details the two threats we’re concerned with, ordered by the breadth of communication enabled by each. If synchronous scripting is possible that implies asynchronous communication is possible, but if asynchronous communication is possible that doesn’t imply synchronous scripting will be possible.
+
