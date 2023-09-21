@@ -22,7 +22,7 @@ The former proposal is primarily concerned with user privacy (e.g., preventing t
 ## Non-Goals
 
 1. Address all breakage resulting from storage partitioning and window isolation.
-2. Force adoption of FedCM and other purpose-built APIs.
+2. Force adoption of FedCM and other purpose-built APIs. While we encourage usage of these APIs, developers should continue to be able to build cross-site user experiences with popups (taking into account additional friction from end-user privacy protections).
 
 ## Threat Model
 
