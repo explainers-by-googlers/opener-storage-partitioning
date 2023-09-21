@@ -17,7 +17,7 @@ The former proposal is primarily concerned with user privacy (e.g., preventing t
 ## Goals
 
 1. Ensure inter-window communication isn't disrupted in a way detrimental to user experience (especially around payment and login functions).
-2. Prevent cross-storage-bucket information leaks that enable cross-site tracking.
+2. Prevent cross-storage-bucket information leaks from window openers that enable cross-site tracking.
 
 ## Non-Goals
 
