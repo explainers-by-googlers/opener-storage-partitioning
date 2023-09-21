@@ -6,15 +6,23 @@
 
 This proposal seeks to prevent or limit same-origin cross-frame communication that can bypass [storage partitioning](https://developer.chrome.com/en/docs/privacy-sandbox/storage-partitioning/), and to do so in alignment with existing work on the [Cross-Origin-Opener-Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cross-Origin-Opener-Policy).
 
-## Background
+## Motivation
 
 [Storage partitioning](https://developer.chrome.com/en/docs/privacy-sandbox/storage-partitioning/), [shipping in M115](https://developer.chrome.com/en/blog/storage-partitioning-dev-trial/), partitions the first and third party storage buckets (and some communication APIs like BroadcastChannel, SharedWorker, and WebLocks) for a given origin. Storage partitioning seeks to prevent “certain types of side-channel cross-site tracking.”
 
 The [Cross-Origin-Opener-Policy](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cross-Origin-Opener-Policy) provides a way for a window to sever communication with cross-origin windows it opens or was opened by. A [proposed extension](https://docs.google.com/document/d/1qXlC6HZXd6UDokI8_cHYAVaXhHop0Ia6-z3fZl6saX8/edit#heading=h.c1dd4bjnvwc6) (restrict-properties) of this proposal allows for a mode with limited communication (asynchronous messages and detecting if the window was closed) between a popup and its opener.
 
-The former proposal is primarily concerned with user privacy (e.g., preventing the average user from having their browsing unknowingly tracked in order to serve ads) whereas the latter proposal is primarily concerned with user security (e.g., ensuring even a targeted user cannot have information leaked cross-site).
+The former proposal is primarily concerned with user privacy (e.g., preventing the average user from having their browsing unknowingly tracked in order to serve ads) whereas the latter proposal is primarily concerned with user security (e.g., ensuring even a targeted user cannot have information leaked cross-site). A way to bridge the gap between these needs should be considered to ensure both constraints can be met without disrupting user experience.
 
-The ability of windows to communicate with each other is critical to current web infrastructure, especially for payment and login models. Whatever changes are pursued in this space must proceed with care to avoid breaking the web.
+## Goals
+
+1. Ensure inter-window communication isn't disrupted in a way detrimental to user experience (especially around payment and login functions).
+2. Prevent cross-storage-bucket information leaks that enable cross-site tracking.
+
+## Non-Goals
+
+1. Address all breakage resulting from storage partitioning and window isolation.
+2. Force adoption of FedCM and other purpose-built APIs.
 
 ## Threat Model
 
@@ -43,7 +51,7 @@ Now that the first-party notexample.com window and the third-party notexample.co
 
 This is possible as long as the frames are in the same COOP Group.
 
-## Proposals
+## Proposed Solutions
 
 Our goal is to maintain cross-page communication where important to web function while striking a better balance with user-privacy.
 
@@ -157,23 +165,11 @@ If the second window navigated back once in history, it would resume using the s
 
 If a publisher, say publisher.com, opens a new window on login.com as part of a login flow the second window will be on a transient storage partition and not have access to the same storage as it would if the user navigated directly to login.com on a new window. The two windows will, however, be able to communicate via post message.
 
-## Interactions
+## Alternatives & Questions
 
 ### Cross-Origin-Opener-Policy
 
 This proposal won’t conflict with the goal of using restrict-properties by default. That change helps mitigate the synchronous scripting threat we’re concerned with while this work ends up more focused on the same-origin cross-partition postMessage.
-
-## Considerations
-
-### User Confusion
-
-There could be a possible concern of long-lived windows on transient storage partitions confusing users. If there is no UI indication to the user that these windows are ‘special’ in some way they’ll wonder why two windows loading the same origin can differ in state (authentication or otherwise).
-
-### User Friction
-
-This breaking change would force authentication flows that depend on popups and opener references to have the user log back in to their provider once per BrowsingContext Group. This friction might be seen as a positive force to encourage developers to adopt [FedCM](https://github.com/fedidcg/FedCM) and other targeted APIs, but will need significant time in origin and then deprecation trial to ensure the web has time to adapt.
-
-## Alternate Options
 
 ### Applying this proposal only to cross-origin iframes
 
@@ -183,6 +179,12 @@ If we only force the partitioning (or block opener references) for windows opene
 
 This would break a huge amount of the web.
 
-## Chrome Timeline
+## Privacy & Security Considerations
 
-Rough target for an origin trial severing window.opener on cross-site navigation is Q4 2023 while transient storage for frames with a window.opener likely needs to wait for storage partitioning to fully launch first.
+### User Confusion
+
+There could be a possible concern of long-lived windows on transient storage partitions confusing users. If there is no UI indication to the user that these windows are ‘special’ in some way they’ll wonder why two windows loading the same origin can differ in state (authentication or otherwise).
+
+### User Friction
+
+This breaking change would force authentication flows that depend on popups and opener references to have the user log back in to their provider once per BrowsingContext Group. This friction might be seen as a positive force to encourage developers to adopt [FedCM](https://github.com/fedidcg/FedCM) and other targeted APIs, but will need significant time in origin and then deprecation trial to ensure the web has time to adapt.
