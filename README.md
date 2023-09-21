@@ -16,8 +16,8 @@ The former proposal is primarily concerned with user privacy (e.g., preventing t
 
 ## Goals
 
-1. Ensure inter-window communication isn't disrupted in a way detrimental to user experience (especially around payment and login functions).
-2. Prevent cross-storage-bucket information leaks from window openers that enable cross-site tracking.
+1. Prevent cross-storage-bucket information leaks from window openers that enable cross-site tracking.
+2. Ensure inter-window communication isn't disrupted in a way detrimental to user experience (especially around payment and login functions).
 
 ## Non-Goals
 
@@ -179,7 +179,7 @@ If we only force the partitioning (or block opener references) for windows opene
 
 This would break a huge amount of the web.
 
-## Privacy & Security Considerations
+## Considerations
 
 ### User Confusion
 
