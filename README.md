@@ -55,9 +55,9 @@ This is possible as long as the frames are in the same COOP Group.
 
 Our goal is to maintain cross-page communication where important to web function while striking a better balance with user-privacy.
 
-This will be done in two steps. First, whenever a frame navigates cross-origin any other windows with a window.opener handle pointing to the navigating frame will have that handle cleared. Second, any frames with a valid window.opener (or window.top.opener) handle at the time of navigation will have transient storage via a StorageKey nonce instead of access to standard first- and third-party StorageKeys.
+This will be done in two steps. First, whenever a frame navigates cross-origin any other windows with a window.opener handle pointing to the navigating frame will have that handle cleared. Second, either (a) any frames with a valid window.opener (or window.top.opener) handle at the time of navigation will have transient storage via a StorageKey nonce instead of access to standard first- and third-party StorageKeys or (b) the opener will be severed by default until user interaction or an API call restores it.
 
-The first proposal should be less disruptive than the second, but metrics will need to be gathered on both. Once implemented, these proposals together prevent any synchronous or asynchronous communication between a first- and third-party storage bucket for the same origin. Instead, communication between two buckets for the same origin will only be possible if one of the buckets is transient. This mitigates the threats we are concerned with.
+The first proposal should be less disruptive than either of the second, but metrics will need to be gathered on both. Once implemented, these proposals together prevent any synchronous or asynchronous communication between a first- and third-party storage bucket for the same origin. Instead, communication between two buckets for the same origin will only be possible if one of the buckets is transient. This mitigates the threats we are concerned with.
 
 ### Proposal 1: Severing window.opener on cross-site navigation
 
@@ -133,7 +133,7 @@ Starting from the initial state, if the third window were to navigate cross-orig
 
 If a publisher, say publisher.com, opens a new window on login.com as part of a login flow the two windows can communicate via post message. If the first window on publisher.com then navigates to some other origin, say wired.com, the two windows will no longer be able to communicate. If the user hits the back button on the first window and it restores the original publisher.com page then the two windows will be able to communicate again.
 
-### Proposal 2: Transient storage for frames with a window.opener
+### Proposal 2a: Transient storage for frames with a window.opener
 
 Any top-level frame with an active window.opener handle must have a transient StorageKey defined by the top-level origin and a nonce. Any sub-frames of this top-level frame will have transient StorageKeys defined by the origin of the frame and the same nonce as the top-level frame. If the window.opener handle is cleared, the next navigation of the top-level frame will have a non-transient first-party StorageKey. If the window.opener handle is cleared, navigation of a sub-frame will still be to a transient StorageKey as long as the top-level frame has a transient StorageKey.
 
@@ -164,6 +164,14 @@ If the second window navigated back once in history, it would resume using the s
 #### Concrete Example
 
 If a publisher, say publisher.com, opens a new window on login.com as part of a login flow the second window will be on a transient storage partition and not have access to the same storage as it would if the user navigated directly to login.com on a new window. The two windows will, however, be able to communicate via post message.
+
+### Proposal 2b: Opt-in restoration of opener
+
+In any cross-origin context where an opener would currently be present, the opener will instead be considered ‘pending’ (not connected) until some heuristic (e.g., user interaction) or specific API (e.g., requestStorageAccess) were called.
+
+![](./images/rsa_0.png)
+
+If a publisher, say publisher.com, opens a new window on login.com as part of a login flow the two windows could not communicate via post message. If the second window on login.com then met the heuristic threshold or called the relevant API the opener would be restored and communication via post message would be possible.
 
 ## Alternatives & Questions
 
