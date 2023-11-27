@@ -1,4 +1,4 @@
-# Explainer: Opener Storage Partitioning
+# Explainer: Opener Protections
 
 [Discussion](https://github.com/arichiv/opener-storage-partitioning/issues)
 
