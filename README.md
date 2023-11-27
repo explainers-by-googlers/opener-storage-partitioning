@@ -51,6 +51,10 @@ Now that the first-party notexample.com window and the third-party notexample.co
 
 This is possible as long as the frames are in the same COOP Group.
 
+### Concrete Example
+
+If a publisher, say publisher.example, has a tracking iframe, say tracker.example, then before storage partitioning that iframe would have had access to the same storage partition as a tab loading tracker.example would have. After storage partitioning, that iframe will have its own partition so might want additional information in order to track the user. One approach the iframe might take would be to open tracker.example in a new window and use the opener reference to engage in synchronous or asynchronous communication to link the two storage partitions (the third-party iframe one and the first-party window one) for tracker.example.
+
 ## Proposed Solutions
 
 Our goal is to maintain cross-page communication where important to web function while striking a better balance with user-privacy.
@@ -131,7 +135,7 @@ Starting from the initial state, if the third window were to navigate cross-orig
 
 #### Concrete Example
 
-If a publisher, say publisher.com, opens a new window on login.com as part of a login flow the two windows can communicate via post message. If the first window on publisher.com then navigates to some other origin, say wired.com, the two windows will no longer be able to communicate. If the user hits the back button on the first window and it restores the original publisher.com page then the two windows will be able to communicate again.
+If a publisher, say publisher.example, opens a new window on tracker.example to profile the user the two windows can communicate via post message. If the first window on publisher.example then navigates to some other origin, say otherpublisher.example, the two windows will no longer be able to communicate. If the user hits the back button on the first window and it restores the original publisher.example page then the two windows will be able to communicate again. This prevents some long-lived popup from sticking around tracking user navigation with cooperating publishers.
 
 ### Proposal 2a: Transient storage for frames with a window.opener
 
@@ -163,7 +167,7 @@ If the second window navigated back once in history, it would resume using the s
 
 #### Concrete Example
 
-If a publisher, say publisher.com, opens a new window on login.com as part of a login flow the second window will be on a transient storage partition and not have access to the same storage as it would if the user navigated directly to login.com on a new window. The two windows will, however, be able to communicate via post message.
+If a publisher, say publisher.example, opens a new window on tracker.example to profile the user the second window will be on a transient storage partition and not have access to the same storage as it would if the user navigated directly to tracker.example on a new window. The two windows will, however, be able to communicate via post message. This prevents usage of the first-party storage partition of tracker.example for tracking that depends on using post message.
 
 ### Proposal 2b: Opt-in restoration of opener
 
@@ -171,7 +175,7 @@ In any cross-origin context where an opener would currently be present, the open
 
 ![](./images/rsa_0.png)
 
-If a publisher, say publisher.com, opens a new window on login.com as part of a login flow the two windows could not communicate via post message. If the second window on login.com then met the heuristic threshold or called the relevant API the opener would be restored and communication via post message would be possible.
+If a publisher, say publisher.example, opens a new window on tracker.example as part of tracking the user the two windows could not communicate via post message. If the second window on tracker.example then met the heuristic threshold or called the relevant API the opener would be restored and communication via post message would be possible. This locks down unauthorized cross-window post messaging to prevent usage of first-party storage partitions for unapproved user tracking.
 
 ## Alternatives & Questions
 
