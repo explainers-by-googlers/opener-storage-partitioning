@@ -53,7 +53,7 @@ This is possible as long as the frames are in the same COOP Group.
 
 ### Concrete Example
 
-If a publisher, say publisher.example, has a tracking iframe, say tracker.example, then before storage partitioning that iframe would have had access to the same storage partition as a tab loading tracker.example would have. After storage partitioning, that iframe will have its own partition so might want additional information in order to track the user. One approach the iframe might take would be to open tracker.example in a new window and use the opener reference to engage in synchronous or asynchronous communication to link the two storage partitions (the third-party iframe one and the first-party window one) for tracker.example.
+If a publisher, say publisher.example, embeds a tracking iframe, say tracker.example, then before storage partitioning that iframe would have had access to the same storage partition as a top-level tab loading tracker.example would have. After storage partitioning, that iframe will have its own partition so might want additional information in order to track the user. One approach the iframe might take would be to open tracker.example in a new window and use the [opener reference](https://developer.mozilla.org/en-US/docs/Web/API/Window/opener) to engage in synchronous or asynchronous communication to establish a communication channel between the two partitions (the third-party iframe and the first-party window) for tracker.example.
 
 ## Proposed Solutions
 
