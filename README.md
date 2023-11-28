@@ -175,7 +175,7 @@ In any cross-origin context where an opener would currently be present, the open
 
 ![](./images/rsa_0.png)
 
-If a publisher, say publisher.example, opens a new window on tracker.example as part of tracking the user the two windows could not communicate via post message. If the second window on tracker.example then met the heuristic threshold or called the relevant API the opener would be restored and communication via post message would be possible. This locks down unauthorized cross-window post messaging to prevent usage of first-party storage partitions for unapproved user tracking.
+If a publisher, say publisher.example, opens a new window on tracker.example as part of tracking the user the two windows could not communicate via post message. If the second window on tracker.example then met the heuristic threshold or called the relevant API the opener would be restored and communication via post message would be possible. This locks down unauthorized cross-window post messaging to prevent usage of first-party storage partitions for cross-site tracking.
 
 ## Alternatives & Questions
 
